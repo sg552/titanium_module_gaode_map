@@ -1,3 +1,7 @@
+rm libs/armeabi/libcom*
+rm libs/armeabi-v7a/libcom*
+rm libs/x86/libcom*
+rm -f dist/*
 ant
 cp /workspace/module_gaodemap/android/dist/*.zip /workspace/test_map
 rm -rf /workspace/test_map/modules

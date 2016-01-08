@@ -15,3 +15,8 @@ tiapp.xml
 #没什么用
 plugins/ti.alloy/hooks/*
 android/build/
+
+LICENSE
+assets/
+documentation/
+example/
