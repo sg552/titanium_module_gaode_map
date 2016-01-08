@@ -21,6 +21,13 @@ import org.appcelerator.titanium.view.TiCompositeLayout.LayoutArrangement;
 import org.appcelerator.titanium.view.TiUIView;
 
 import android.app.Activity;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.LinearLayout;
+import android.os.Bundle;
+
+import com.amap.api.maps.AMap;
+import com.amap.api.maps.MapView;
+import com.amap.api.maps.MapsInitializer;
 
 
 // This proxy can be created by calling Gaodemap.createExample({message: "hello world"})
@@ -30,22 +37,23 @@ public class ExampleProxy extends TiViewProxy
 	// Standard Debugging variables
 	private static final String LCAT = "ExampleProxy";
 	private static final boolean DBG = TiConfig.LOGD;
+  private MapView map_view ;
+  private AMap a_map;
 
 	private class ExampleView extends TiUIView
 	{
 		public ExampleView(TiViewProxy proxy) {
-			super(proxy);
-			LayoutArrangement arrangement = LayoutArrangement.DEFAULT;
+      super(proxy);
 
-			if (proxy.hasProperty(TiC.PROPERTY_LAYOUT)) {
-				String layoutProperty = TiConvert.toString(proxy.getProperty(TiC.PROPERTY_LAYOUT));
-				if (layoutProperty.equals(TiC.LAYOUT_HORIZONTAL)) {
-					arrangement = LayoutArrangement.HORIZONTAL;
-				} else if (layoutProperty.equals(TiC.LAYOUT_VERTICAL)) {
-					arrangement = LayoutArrangement.VERTICAL;
-				}
-			}
-			setNativeView(new TiCompositeLayout(proxy.getActivity(), arrangement));
+      LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+      LinearLayout holder = new LinearLayout(proxy.getActivity());
+      holder.setLayoutParams(lp);
+
+      map_view = new MapView(proxy.getActivity());
+
+      holder.addView(map_view);
+
+      setNativeView(holder);
 		}
 
 		@Override
@@ -68,8 +76,15 @@ public class ExampleProxy extends TiViewProxy
 		TiUIView view = new ExampleView(this);
 		view.getLayoutParams().autoFillsHeight = true;
 		view.getLayoutParams().autoFillsWidth = true;
+    if(a_map == null){
+      a_map = map_view.getMap();
+    }
 		return view;
 	}
+  @Override
+  public void onCreate(Activity activity, Bundle savedInstanceState) {
+    map_view.onCreate(savedInstanceState);
+  }
 
 	// Handle creation options
 	@Override
