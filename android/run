@@ -1,0 +1,3 @@
+ant
+cp /workspace/module_gaodemap/android/dist/*.zip /workspace/test_map
+rm -rf /workspace/test_map/modules
