@@ -32,10 +32,10 @@ import com.amap.api.maps.MapsInitializer;
 
 // This proxy can be created by calling Gaodemap.createExample({message: "hello world"})
 @Kroll.proxy(creatableInModule=GaodemapModule.class)
-public class GaodemapProxy extends TiViewProxy
+public class MapProxy extends TiViewProxy
 {
 	// Standard Debugging variables
-	private static final String LCAT = "GaodemapProxy";
+	private static final String LCAT = "MapProxy";
 	private static final boolean DBG = TiConfig.LOGD;
   private MapView map_view ;
   private AMap a_map;
@@ -65,7 +65,7 @@ public class GaodemapProxy extends TiViewProxy
 
 
 	// Constructor
-	public GaodemapProxy()
+	public MapProxy()
 	{
 		super();
 	}

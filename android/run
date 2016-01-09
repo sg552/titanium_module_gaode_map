@@ -1,7 +1,12 @@
-rm libs/armeabi/libcom*
-rm libs/armeabi-v7a/libcom*
-rm libs/x86/libcom*
-rm -f dist/*
-ant
-cp /workspace/module_gaodemap/android/dist/*.zip /workspace/test_map
+# 这个脚本中，  /workspace/test_map 是 ti app 的目录
+# 这个脚本存在于  <你的module文件夹>/android 目录下
+find libs -name libcom* -exec rm {} +
+rm -rf build/*
+rm -rf dist/*
 rm -rf /workspace/test_map/modules
+
+# 编译module
+ant
+
+# copy到对应的目录下
+cp android/dist/*.zip /workspace/test_map
