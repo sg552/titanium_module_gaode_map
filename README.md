@@ -1,4 +1,27 @@
+# Titanium 高德地图 module
 
+Titanium android自带的google地图模块用不了，所以只能用高德地图的模块了。
+
+![地图](gaode_map.jpg)
+
+## 使用方法：
+
+修改
+- build.properties  重新定义这里的NDK等路径。
+- run               修改最后一个你的测试文件
+
+使用 example/app.js 中的文件，把它copy到一个新的titanium app项目中，
+修改 tiapp.xml , 声明对这个module的引用，就可以了。
+
+refer to: http://siwei.me/blog/posts/lession-9-sdk
+
+联系： shensiwei@sina.com
+
+版本： titanium 5.1.1.GA
+android: api 23
+高德地图： 2015.12月的版本.
+
+# 下面是我正在写的 << titanium 中文文档>> 中的摘录
 
 开发module是Appcelerator使用过程中的高级阶段。
 苹果和安卓的官方SDK功能再多也无法满足所有的用户需求。

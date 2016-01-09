@@ -9,4 +9,4 @@ rm -rf /workspace/test_map/modules
 ant
 
 # copy到对应的目录下
-cp android/dist/*.zip /workspace/test_map
+cp dist/*.zip /workspace/test_map
