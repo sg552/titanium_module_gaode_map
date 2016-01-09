@@ -13,6 +13,17 @@ Titanium android自带的google地图模块用不了，所以只能用高德地�
 使用 example/app.js 中的文件，把它copy到一个新的titanium app项目中，
 修改 tiapp.xml , 声明对这个module的引用，就可以了。
 
+### 编译
+
+```
+$ cd android
+# 修改run脚本后
+$ ./run
+```
+
+你的titanium app目录下就会有个zip文件。 之后按照正常的titanium app去做就好了。
+
+## 其他信息
 refer to: http://siwei.me/blog/posts/lession-9-sdk
 
 联系： shensiwei@sina.com
