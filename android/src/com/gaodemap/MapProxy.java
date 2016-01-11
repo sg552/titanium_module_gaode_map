@@ -29,11 +29,17 @@ import com.amap.api.maps.AMap;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.MapsInitializer;
 
+import com.amap.api.maps.model.BitmapDescriptorFactory;
+import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.Marker;
+import com.amap.api.maps.model.MarkerOptions;
+
+import com.amap.api.maps.AMap.OnMarkerClickListener;
 
 // This proxy can be created by calling Gaodemap.createExample({message: "hello world"})
 @Kroll.proxy(creatableInModule=GaodemapModule.class)
 public class MapProxy extends TiViewProxy
-{
+    implements OnMarkerClickListener {
 	// Standard Debugging variables
 	private static final String LCAT = "MapProxy";
 	private static final boolean DBG = TiConfig.LOGD;
@@ -78,12 +84,35 @@ public class MapProxy extends TiViewProxy
 		view.getLayoutParams().autoFillsWidth = true;
     if(a_map == null){
       a_map = map_view.getMap();
+      add_markers(39.9, 116.47);
+      add_markers(39.92, 116.49);
     }
 		return view;
 	}
+
+  private void add_markers(double latitude, double longitude){
+    Marker marker = a_map.addMarker(
+        new MarkerOptions()
+          .title("学习android")
+          .snippet("我是第二行内容")
+          .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+          .draggable(false)
+    );
+    //marker.setPosition(new LatLng(39.99, 116.47));
+    marker.setPosition(new LatLng(latitude, longitude));
+  }
+
   @Override
   public void onCreate(Activity activity, Bundle savedInstanceState) {
     map_view.onCreate(savedInstanceState);
+  }
+
+  @Override
+  public boolean onMarkerClick(final Marker marker){
+     //TextView text_view = (TextView)findViewById(R.id.message_content);
+     //text_view.setText("你点击了我" + marker.getTitle());
+     marker.showInfoWindow();
+     return false;
   }
 
 	// Handle creation options
