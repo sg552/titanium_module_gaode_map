@@ -2,6 +2,12 @@
 
 Titanium android自带的google地图模块用不了，所以只能用高德地图的模块了。
 
+目前只有安卓。
+
+功能：
+1. 显示地图
+2. 在地图上显示Marker
+
 ![地图](gaode_map.jpg)
 
 ## 使用方法：
@@ -12,6 +18,51 @@ Titanium android自带的google地图模块用不了，所以只能用高德地�
 
 使用 example/app.js 中的文件，把它copy到一个新的titanium app项目中，
 修改 tiapp.xml , 声明对这个module的引用，就可以了。
+
+### 在app.js中：
+
+```javascript
+var win = Ti.UI.createWindow(
+{
+  backgroundColor: 'white'
+})
+var label = Ti.UI.createLabel();
+win.add(label)
+win.open();
+
+var the_module = require('com.gaodemap');
+
+var proxy = the_module.createMap( {
+  borderColor: 'green',
+  borderWidth: 3,
+  width: 400,
+  height: 400,
+  top: 10,
+  left: 20,
+  lifecycleContainer: win
+});
+
+win.add(proxy);
+console.info("======== , 建立了proxy, 放到了win中");
+
+// 等proxy的createView 方法执行完之后， 3秒钟之后才开始加各种 marker
+setTimeout(function(){
+  console.info("== 开始新建 marker, 看是不是延迟了3秒执行");
+  proxy.create_marker({
+    latitude: "39.9",
+    longitude: "116.47",
+    title: "我是第一个title"
+  })
+
+  proxy.create_marker({
+    latitude: "39.9",
+    longitude: "116.49",
+    title: "我是第2个title"
+  })
+}, 3000)
+```
+
+
 
 ### 编译
 
@@ -181,3 +232,10 @@ rm -rf /workspace/test_map/modules
 ```
 
 我们每次 `$ ./run ` 就可以了。
+
+# module的方法调用顺序 (android)
+
+1. 创建module constructor
+2. 创建 proxy constructor
+3. 调用 proxy 的普通方法 , 如果app.js中没有使用setTimeout来调用普通方法的话。
+4. 调用 proxy 的 createView 方法
