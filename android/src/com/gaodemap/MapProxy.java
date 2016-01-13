@@ -48,6 +48,7 @@ public class MapProxy extends TiViewProxy
   private MapView map_view ;
   private AMap a_map;
   private List<Marker> markers = new ArrayList<Marker>();
+  private List<Map> marker_parameters = new ArrayList<Map>();
 
 	private class ExampleView extends TiUIView
 	{
@@ -76,45 +77,64 @@ public class MapProxy extends TiViewProxy
 	public MapProxy()
 	{
 		super();
-	}
-
-	// Constructor
-	public MapProxy(List<String> marker_parameters)
-	{
-		super();
-    Log.i(LCAT, "== marker_parameters: " + marker_parameters.toString());
+    Log.i(LCAT, "== in MapProxy(), " + this );
 	}
 
 	@Override
 	public TiUIView createView(Activity activity)
 	{
+    Log.i(LCAT, "== in createView");
 		TiUIView view = new ExampleView(this);
 		view.getLayoutParams().autoFillsHeight = true;
 		view.getLayoutParams().autoFillsWidth = true;
     if(a_map == null){
       a_map = map_view.getMap();
       a_map.setOnMarkerClickListener(this);
-      add_markers(39.9, 116.47);
-      add_markers(39.92, 116.49);
+      //add_markers(39.9, 116.47);
+      //add_markers(39.92, 116.49);
     }
 		return view;
 	}
 
-  private void add_markers(double latitude, double longitude){
+  @Kroll.method
+  public void create_marker(Map options){
+    Log.i(LCAT, "== in create_marker, options: " + options.toString() );
+    Log.i(LCAT, "== a_map is: " + a_map);
+    Log.i(LCAT, "== this proxy is: " + this);
+
     Marker marker = a_map.addMarker(
         new MarkerOptions()
-          .title("学习android")
+          .title((String)options.get("title"))
           .snippet("我是第333333333333333333333行内容")
           .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
           .draggable(false)
     );
-    marker.setPosition(new LatLng(latitude, longitude));
+    marker.setPosition(new LatLng(
+          TiConvert.toDouble(options.get("latitude")),
+          TiConvert.toDouble(options.get("longitude"))
+    ));
     //marker.showInfoWindow();
     markers.add(marker);
+    Log.i(LCAT, "=== lalala, create_marker, done " + marker.toString());
+  }
+
+  public void add_markers(double latitude, double longitude){
+    Log.i(LCAT, "== in add_markers, latitude: " + String.valueOf(latitude) );
+    //Marker marker = a_map.addMarker(
+    //    new MarkerOptions()
+    //      .title("学习android")
+    //      .snippet("我是第333333333333333333333行内容")
+    //      .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+    //      .draggable(false)
+    //);
+    //marker.setPosition(new LatLng(latitude, longitude));
+    ////marker.showInfoWindow();
+    //markers.add(marker);
   }
 
   @Override
   public void onCreate(Activity activity, Bundle savedInstanceState) {
+    Log.i(LCAT, "== in onCreate in proxy");
     map_view.onCreate(savedInstanceState);
   }
 
@@ -138,7 +158,7 @@ public class MapProxy extends TiViewProxy
     return false;
   }
 
-	// Handle creation options
+	// 这里设置 创建时需要的各种参数。
 	@Override
 	public void handleCreationDict(KrollDict options)
 	{
