@@ -105,7 +105,7 @@ public class MapProxy extends TiViewProxy
     Marker marker = a_map.addMarker(
         new MarkerOptions()
           .title((String)options.get("title"))
-          .snippet("我是第333333333333333333333行内容")
+          .snippet((String)options.get("snippet"))
           .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
           .draggable(false)
     );
@@ -113,23 +113,10 @@ public class MapProxy extends TiViewProxy
           TiConvert.toDouble(options.get("latitude")),
           TiConvert.toDouble(options.get("longitude"))
     ));
+    marker.setObject(options.get("extra_data"));
+    Log.i(LCAT, "== marker.extra_data: " + marker.getObject());
     //marker.showInfoWindow();
     markers.add(marker);
-    Log.i(LCAT, "=== lalala, create_marker, done " + marker.toString());
-  }
-
-  public void add_markers(double latitude, double longitude){
-    Log.i(LCAT, "== in add_markers, latitude: " + String.valueOf(latitude) );
-    //Marker marker = a_map.addMarker(
-    //    new MarkerOptions()
-    //      .title("学习android")
-    //      .snippet("我是第333333333333333333333行内容")
-    //      .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-    //      .draggable(false)
-    //);
-    //marker.setPosition(new LatLng(latitude, longitude));
-    ////marker.showInfoWindow();
-    //markers.add(marker);
   }
 
   @Override
@@ -140,23 +127,19 @@ public class MapProxy extends TiViewProxy
 
   @Override
   public boolean onMarkerClick(final Marker marker){
-    //TextView text_view = (TextView)findViewById(R.id.message_content);
-    //text_view.setText("你点击了我" + marker.getTitle());
+    for(Marker temp_marker : markers){
+      temp_marker.hideInfoWindow();
+    }
 
-    //boolean is_info_window_shown = marker.isInfoWindowShown();
-    //for(Marker temp_marker : markers){
-    //  temp_marker.hideInfoWindow();
-    //}
-    ////Log.i(LCAT, "== after hide all the marker info, isInfoWindowShown? " + new Boolean(marker.isInfoWindowShown()).toString());
-    //if(is_info_window_shown){
-    //  marker.setTitle("我应该被隐藏掉");
-    //  marker.hideInfoWindow();
-    //}else{
-    //  //marker.showInfoWindow();
-    //  marker.setTitle("我应该被显示");
-    //}
+    HashMap<String, Object> event = new HashMap<String, Object>();
+    event.put("id", marker.getObject());
+    this.fireEvent("marker_clicked", event);
+
+    Log.i(LCAT, "=== marker clicked fired in java");
     return false;
   }
+
+
 
 	// 这里设置 创建时需要的各种参数。
 	@Override
