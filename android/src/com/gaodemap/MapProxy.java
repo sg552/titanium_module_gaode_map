@@ -59,7 +59,11 @@ public class MapProxy extends TiViewProxy
       LinearLayout holder = new LinearLayout(proxy.getActivity());
       holder.setLayoutParams(lp);
 
-      map_view = new MapView(proxy.getActivity());
+      if(map_view == null){
+        Log.i(LCAT, "== in ExampleView, map_view is blank... recreating...");
+        map_view = new MapView(proxy.getActivity());
+        Log.i(LCAT, "== in ExampleView, map_view is created");
+      }
 
       holder.addView(map_view);
 
@@ -77,7 +81,6 @@ public class MapProxy extends TiViewProxy
 	public MapProxy()
 	{
 		super();
-    Log.i(LCAT, "== in MapProxy(), " + this );
 	}
 
 	@Override
@@ -87,11 +90,15 @@ public class MapProxy extends TiViewProxy
 		TiUIView view = new ExampleView(this);
 		view.getLayoutParams().autoFillsHeight = true;
 		view.getLayoutParams().autoFillsWidth = true;
+
+    if(map_view == null){
+      Log.i(LCAT, "== in createView, map_view is blank... creating...");
+      map_view = new MapView(activity);
+    }
+
     if(a_map == null){
       a_map = map_view.getMap();
       a_map.setOnMarkerClickListener(this);
-      //add_markers(39.9, 116.47);
-      //add_markers(39.92, 116.49);
     }
 		return view;
 	}
@@ -122,6 +129,10 @@ public class MapProxy extends TiViewProxy
   @Override
   public void onCreate(Activity activity, Bundle savedInstanceState) {
     Log.i(LCAT, "== in onCreate in proxy");
+    if(map_view == null){
+      Log.i(LCAT, "== in onCreate, map_view is blank... recreating...");
+      map_view = new MapView(this.getActivity());
+    }
     map_view.onCreate(savedInstanceState);
   }
 
@@ -140,7 +151,43 @@ public class MapProxy extends TiViewProxy
   }
 
 
+  /**
+   * 方法必须重写
+   */
+  @Override
+  public void onResume(Activity activity) {
+      super.onResume(activity);
+      map_view.onResume();
+  }
 
+  /**
+   * 方法必须重写
+   */
+  @Override
+  public void onPause(Activity activity) {
+      super.onPause(activity);
+      map_view.onPause();
+  }
+
+  /**
+   * 方法必须重写
+   */
+  //@Override
+  //public void onSaveInstanceState(Bundle outState) {
+  //    super.onSaveInstanceState(outState);
+  //    map_view.onSaveInstanceState(outState);
+  //}
+
+  /**
+   * 方法必须重写
+   */
+  @Override
+  public void onDestroy(Activity activity) {
+      super.onDestroy(activity);
+      map_view.onDestroy();
+  }
+
+  /*
 	// 这里设置 创建时需要的各种参数。
 	@Override
 	public void handleCreationDict(KrollDict options)
@@ -151,24 +198,5 @@ public class MapProxy extends TiViewProxy
 			Log.i(LCAT, "example created with message: " + options.get("message"));
 		}
 	}
-
-	// Methods
-	@Kroll.method
-	public void printMessage(String message)
-	{
-		Log.i(LCAT, "printing message: " + message);
-	}
-
-
-	@Kroll.getProperty @Kroll.method
-	public String getMessage()
-	{
-        return "Hello World from my module";
-	}
-
-	@Kroll.setProperty @Kroll.method
-	public void setMessage(String message)
-	{
-	    Log.i(LCAT, "Tried setting module message to: " + message);
-	}
+  */
 }
